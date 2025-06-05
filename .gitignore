@@ -1,0 +1,11 @@
+# Build output
+*.exe
+*.out
+
+# IDE/editor files
+.vscode/
+.idea/
+*.log
+
+# Runtime files
+.todo.json
