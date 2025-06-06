@@ -1,0 +1,15 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/main.exe ./devmain.go"
+bin = "tmp/main.exe"
+full_bin = "./tmp/main.exe"
+
+include_ext = ["go"]
+poll = true
+poll_interval = 1000
+exclude_unchanged = false
+
+[misc]
+clean_on_exit = true

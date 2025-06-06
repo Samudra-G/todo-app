@@ -10,16 +10,16 @@ import (
 	"github.com/alexeyco/simpletable"
 )
 
-type item struct {
+type Item struct {
 	Task string
 	Done bool
 	CreatedAt time.Time
 	CompletedAt time.Time
 }
-type Todo []item
+type Todo []Item
 
 func (t *Todo) Add(task string) {
-	todo := item{
+	todo := Item{
 		Task: task,
 		Done: false,
 		CreatedAt: time.Now(),
