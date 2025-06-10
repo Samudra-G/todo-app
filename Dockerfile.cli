@@ -1,0 +1,19 @@
+#Dockerfile.cli
+
+#Build
+FROM golang:1.24.4 AS builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+WORKDIR /app/cmd/todo
+RUN go build -o /todo-cli
+
+FROM debian:bookworm-slim
+
+COPY --from=builder /todo-cli /usr/local/bin/todo-cli
+
+ENTRYPOINT ["todo-cli"]

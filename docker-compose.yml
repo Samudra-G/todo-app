@@ -1,0 +1,17 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: todo_api
+    ports:
+      - "8080:4000"
+
+  cli:
+    build:
+      context: .
+      dockerfile: Dockerfile.cli
+    container_name: todo_cli
+    stdin_open: true
+    tty: true
+    command: --help

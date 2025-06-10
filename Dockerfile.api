@@ -1,0 +1,20 @@
+# Dockerfile.api
+
+# Build stage
+FROM golang:1.24.4 AS builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o /todo-api ./devmain.go
+
+# Final image
+FROM golang:1.24.4
+
+COPY --from=builder /todo-api /usr/local/bin/todo-api
+
+EXPOSE 8080
+ENTRYPOINT ["todo-api"]

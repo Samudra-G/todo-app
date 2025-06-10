@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"log"
+	"os"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -17,5 +18,10 @@ func Main(){
 		AllowMethods:  "GET, POST, PUT, DELETE, OPTIONS",
 	}))
 	RegisterRoutes(app)
-	log.Fatal(app.Listen(":4000"))
+	
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "4000" 
+	}
+	log.Fatal(app.Listen(":" + port))
 }
