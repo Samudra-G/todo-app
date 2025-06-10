@@ -1,3 +1,9 @@
+// @title Todo App API
+// @version 1.0
+// @description This is a sample server for a Todo app CLI + API.
+// @host localhost:4000
+// @BasePath /
+
 package main
 
 import (

@@ -1,0 +1,142 @@
+basePath: /
+definitions:
+  todo.Item:
+    properties:
+      completedAt:
+        type: string
+      createdAt:
+        type: string
+      done:
+        type: boolean
+      task:
+        type: string
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: This is a sample server for a Todo app CLI + API.
+  title: Todo App API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Check if server is running
+      responses:
+        "200":
+          description: OK
+      summary: Health check
+      tags:
+      - system
+  /todos:
+    get:
+      description: Returns all todo items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/todo.Item'
+            type: array
+      summary: Get all todos
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: Adds a new todo item
+      parameters:
+      - description: Todo task
+        in: body
+        name: todo
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new todo
+      tags:
+      - todos
+  /todos/{id}:
+    delete:
+      description: Deletes a todo item by ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a todo item
+      tags:
+      - todos
+  /todos/{id}/complete:
+    put:
+      description: Marks the given todo item as complete
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Mark todo as complete
+      tags:
+      - todos
+swagger: "2.0"
