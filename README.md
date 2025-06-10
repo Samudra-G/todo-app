@@ -89,7 +89,7 @@ curl -X POST http://localhost:4000/todos \
 After starting the API, visit:
 
 ```
-http://localhost:4000/docs
+http://localhost:4000/docs/
 ```
 
 To interactively test your endpoints and explore request/response formats.
