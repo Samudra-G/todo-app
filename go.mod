@@ -1,6 +1,6 @@
 module github.com/Samudra-G/todo-app
 
-go 1.24.3
+go 1.24.0
 
 require github.com/alexeyco/simpletable v1.0.0
 
