@@ -1,23 +1,31 @@
-# 📝 Todo CLI App in Go
+# 📝 Todo CLI + REST API App in Go
 
-A clean, modular command-line **Todo application** written in Go — featuring task creation, completion, deletion, persistent storage (JSON), and a beautiful terminal UI using `simpletable`.
+A clean, modular **Todo application** built in Go with:
 
-![Go Version](https://img.shields.io/badge/Go-1.21+-blue?style=flat-square)
-![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)
-![Platform](https://img.shields.io/badge/platform-terminal-lightgrey)
+* 🔧 A powerful command-line interface (CLI)
+* 🌐 A RESTful API with Swagger UI docs
+* 🐳 Docker support for containerized deployment
+* 📆 Modular structure and JSON-based persistence
 
 ---
 
-## 📦 Features
+## 📆 Features
 
-- ✅ Add new tasks via CLI or piped input
-- 📋 List all tasks in a styled table (with `CreatedAt`, `CompletedAt`, status)
-- ☑️ Mark tasks as complete
-- ❌ Delete tasks by index
-- 💾 Persistent task storage in `.todo.json`
-- 🎨 Colored output using ANSI escape codes
-- 🧱 Modular project structure with `internal` packages
-- 🛠 Simple `Makefile` for easy builds
+### CLI
+
+* ✅ Add new tasks via CLI or piped input
+* 📋 List tasks in a styled terminal table (`CreatedAt`, `CompletedAt`, status)
+* ☑️ Mark tasks complete
+* ❌ Delete tasks by index
+* 📀 Persistent storage in `.todo.json`
+
+### API
+
+* 🧠 RESTful endpoints for task operations (`GET`, `POST`, `PUT`, `DELETE`)
+* �� `/health` endpoint for deployment checks
+* 🧾 Interactive Swagger docs at `/docs`
+* 🔓 CORS-enabled (configurable)
+* 💥 JSON-based response messages
 
 ---
 
@@ -25,19 +33,12 @@ A clean, modular command-line **Todo application** written in Go — featuring t
 
 ### 🔧 Prerequisites
 
-- [Go 1.21+](https://golang.org/dl/)
-
-### 📥 Installation
-
-```bash
-git clone https://github.com/yourusername/todo-cli-go.git
-cd todo-cli-go
-make build    # or: go build -o todo ./cmd/todo
-```
+* [Go 1.21+](https://golang.org/dl/)
+* Optional: [Docker](https://www.docker.com/) for container-based usage
 
 ---
 
-## 🛠 Usage
+## 💻 CLI Usage
 
 ```bash
 ./todo [flags] [task description]
@@ -45,12 +46,12 @@ make build    # or: go build -o todo ./cmd/todo
 
 ### 🎯 Flags
 
-| Flag         | Description                                 | Example                                  |
-|--------------|---------------------------------------------|------------------------------------------|
-| `-add`       | Add a new task                              | `./todo -add "Buy groceries"`            |
-| `-list`      | List all tasks                              | `./todo -list`                           |
-| `-complete`  | Mark task complete by index (1-based)       | `./todo -complete 2`                     |
-| `-del`       | Delete task by index                        | `./todo -del 3`                          |
+| Flag        | Description                           | Example                       |
+| ----------- | ------------------------------------- | ----------------------------- |
+| `-add`      | Add a new task                        | `./todo -add "Buy groceries"` |
+| `-list`     | List all tasks                        | `./todo -list`                |
+| `-complete` | Mark task complete by index (1-based) | `./todo -complete 2`          |
+| `-del`      | Delete task by index                  | `./todo -del 3`               |
 
 ### 💡 Add via Pipe
 
@@ -60,19 +61,54 @@ echo "Read 'The Go Programming Language'" | ./todo -add
 
 ---
 
-## 🗃 Example Output
+## 🌐 API Endpoints
+
+| Method | Endpoint              | Description                   |
+| ------ | --------------------- | ----------------------------- |
+| GET    | `/todos`              | List all tasks                |
+| POST   | `/todos`              | Add a new task (JSON body)    |
+| PUT    | `/todos/:id/complete` | Mark a task complete by index |
+| DELETE | `/todos/:id`          | Delete task by index          |
+| GET    | `/health`             | Healthcheck endpoint          |
+| GET    | `/docs`               | Swagger UI for API            |
+
+---
+
+## 📄 Example API Request
 
 ```bash
-./todo -list
+curl -X POST http://localhost:4000/todos \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Finish Render deployment"}'
 ```
 
+---
+
+## 🪪 Swagger UI
+
+After starting the API, visit:
+
 ```
-╔═══╤══════════════════════════════════════╤═══════╤═══════════════════════════╤═══════════════════════════╗
-║ # │                 Task                 │ Done? │             CreatedAt     │          CompletedAt      ║
-╟───┼──────────────────────────────────────┼───────┼────────────────────────────┼──────────────────────────╢
-║ 1 │ ✅ Finish building the CLI app       │ Yes   │ 2025-06-05T13:11:59+05:30 │ 2025-06-05T13:13:46+05:30 ║
-║ 2 │ Write documentation                 │ No    │ 2025-06-05T13:13:26+05:30 │ 0001-01-01T00:00:00Z       ║
-╚═══╧══════════════════════════════════════╧═══════╧═══════════════════════════╧═══════════════════════════╝
+http://localhost:4000/docs
+```
+
+To interactively test your endpoints and explore request/response formats.
+
+---
+
+## 🐳 Docker Support
+
+Build and run using Docker:
+
+```bash
+docker build -t todo-api -f Dockerfile.api .
+docker run -p 4000:4000 todo-api
+```
+
+Or use Docker Compose:
+
+```bash
+docker compose up --build
 ```
 
 ---
@@ -82,24 +118,18 @@ echo "Read 'The Go Programming Language'" | ./todo -add
 ```bash
 .
 ├── cmd/
-│   └── todo/
-│       └── main.go        # CLI entrypoint
+│   ├── api/              # API entrypoint (Fiber)
+│   └── todo/             # CLI entrypoint
+├── docs/                 # Swagger docs (autogenerated)
 ├── internal/
-│   └── todo/
-│       ├── todo.go        # Task logic (add, complete, delete, load, store)
-│       └── colors.go      # Color utilities
+│   └── todo/             # Business logic (task operations)
+├── .todo.json            # JSON-based task storage
+├── devmain.go            # Unified API launch file
+├── Dockerfile.api        # Dockerfile for API
 ├── Makefile
-├── go.mod
-├── go.sum
-├── LICENSE
+├── go.mod / go.sum
 └── README.md
 ```
-
----
-
-## 🧪 Running Tests
-
-_Tests can be added soon for core task logic in `internal/todo`._
 
 ---
 
@@ -109,27 +139,20 @@ Licensed under the [Apache 2.0 License](./LICENSE).
 
 ---
 
-## 🙋‍♂️ Author
+## 🤛🏼 Author
 
 **Samudra Mukhar Goswami**
 
-- 💼 [LinkedIn](https://linkedin.com/in/samudramukhar)
-- ✍️ [Medium Blog](https://medium.com/@samudramukhar)
-- 💻 [GitHub](https://github.com/Samudra-G)
+* 💼 [LinkedIn](https://linkedin.com/in/samudramukhar)
+* 📝 [Medium Blog](https://medium.com/@samudramukhar)
+* 💻 [GitHub](https://github.com/Samudra-G)
 
 ---
 
 ## 🌟 Star This Repo
 
-If you found this project useful or educational, a ⭐️ on [GitHub](https://github.com/Samudra-G/todo-cli-go) would be awesome!
+If you found this project useful, consider starring it on [GitHub](https://github.com/Samudra-G/todo-app) ⭐️
 
 ---
 
-## 📌 TODOs (for future improvement)
-
-- [ ] Add unit tests for core functions
-- [ ] Add task priority and tags
-- [ ] Support for editing tasks
-- [ ] Auto-backup and config options
-
----
+##
