@@ -29,6 +29,9 @@ func RegisterRoutes(app *fiber.App) {
 // @Success 200 {array} todo.Item
 // @Router /todos [get]
 func GetTodos(c *fiber.Ctx) error {
+	if len(todos) == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "No todos found"})
+	}
 	return c.JSON(todos)
 }
 
